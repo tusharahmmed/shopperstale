@@ -1,0 +1,48 @@
+.marketplace-slider {
+  width: 80vw;
+  margin-bottom: 9%;
+}
+
+.marketplace-slider .swiper-button-prev {
+  color: black;
+}
+.marketplace-slider .swiper-button-next {
+  color: black;
+}
+
+@media screen and (max-width: 1200px) {
+  .marketplace-slider {
+    margin-bottom: 20%;
+  }
+}
+@media screen and (max-width: 900px) {
+  .marketplace-slider {
+    margin-bottom: 30%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .marketplace-slider {
+    margin-bottom: 45%;
+    width: 65vw;
+  }
+
+  .marketplace-slider .swiper-button-prev::after {
+    font-size: 30px !important;
+  }
+  .marketplace-slider .swiper-button-next::after {
+    font-size: 30px !important;
+  }
+  
+}
+@media screen and (max-width: 500px) {
+  .marketplace-slider {
+    margin-bottom: 90%;
+    width: 70vw;
+  }
+}
+@media screen and (max-width: 400px) {
+  .marketplace-slider {
+    margin-bottom: 90%;
+    width: 76vw;
+  }
+}
