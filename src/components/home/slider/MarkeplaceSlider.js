@@ -727,13 +727,11 @@ const MarkeplaceSlider = ({ country }) => {
       >
         {sliderList
           .filter((item) => item.country === country)
-          .map((item) => {
-            return (
-              <SwiperSlide key={item.id}>
-                <SliderItem data={item} />
-              </SwiperSlide>
-            );
-          })}
+          .map((item) => (
+            <SwiperSlide key={item.id}>
+              <SliderItem data={item} />
+            </SwiperSlide>
+          ))}
         <SwiperSlide>
           <CustomItem />
         </SwiperSlide>

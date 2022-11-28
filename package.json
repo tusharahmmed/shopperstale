@@ -10,7 +10,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.38.0",
     "react-icons": "^4.6.0",
     "react-messenger-chat-plugin": "^3.0.5",
@@ -19,6 +21,7 @@
     "react-tabs": "^5.1.0",
     "react-whatsapp-widget": "^2.1.0",
     "styled-components": "^5.3.6",
+    "sweetalert": "^2.1.2",
     "swiper": "^8.4.4",
     "web-vitals": "^2.1.4"
   },

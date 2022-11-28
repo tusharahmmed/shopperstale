@@ -1,9 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 
 const Header = () => {
 
+  let match = useRouteMatch('/admin');
+  if(match){
+    return null;
+  }
 
   return (
     <Container>
