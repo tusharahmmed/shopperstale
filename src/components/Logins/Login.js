@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { BsGlobe2 } from "react-icons/bs";
-// import useAuth from '../../hooks/useAuth';
-// import { Logo } from '../Header';
+import {
+  useAuthState,
+  useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import swal from "sweetalert";
+import auth from "../../firebase.init";
+import { LoadingOverlay } from "@mantine/core";
 
 const Login = () => {
-  // const { handleLogin,user } = useAuth()
+  // auth
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+  const [currentUser] = useAuthState(auth);
+  // use form
   const {
     register,
     handleSubmit,
@@ -17,29 +24,54 @@ const Login = () => {
   } = useForm();
 
   let location = useLocation();
+  let { from } = location.state || { from: { pathname: "/" } };
   let history = useHistory();
 
+  // if already loged in
+  if (currentUser) {
+    history.push("/");
+  }
+
+  // handle form submission
   const onSubmit = (data) => {
-    if (data.password.length <= 5) {
-      swal("Warning!", "Password should be at least 6 digits.", "warning");
+    const { password } = data;
+
+    // validate
+    if (password.length > 7) {
+      // sign in method
+      signInWithEmailAndPassword(data?.email, password);
     } else {
-      const { email, password } = data;
-      // handleLogin(email, password, location, history);
+      swal("Password must be at least 8 characters");
     }
   };
 
+  // login response
+
+  useEffect(() => {
+    // if error
+    if (error) {
+      swal({
+        text: `${error?.message}`,
+        icon: "warning",
+        button: "ok",
+        dangerMode: true,
+      });
+    }
+    // if successfull
+    if (user) {
+      reset();
+      history.replace(from);
+    }
+  }, [error, user]);
+
   return (
     <Container>
-      {/* <LoginHeader>
-                <Logo><Link to="/">
-                    PORSCHE
-                </Link></Logo>
-                <div>
-                <Link to={user.email ? '/myaccount' : '/login'}><span>Account</span></Link>
-                </div>
-            </LoginHeader> */}
       <Wraper>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          style={{ position: "relative" }}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {loading && <LoadingOverlay visible={true} overlayBlur={2} />}
           <FormTitle>
             <h2>Sign In</h2>
           </FormTitle>
@@ -62,14 +94,15 @@ const Login = () => {
           </InputWraper>
           <SubmitButto type="submit">SIGN IN</SubmitButto>
         </form>
-        <OR>
+        <ForgetPw>Forget Password? <Link to="/login/reset">Click Here</Link></ForgetPw>
+        {/* <OR> */}
           {/* <span></span> */}
-          <p>OR</p>
+          {/* <p>OR</p> */}
           {/* <span></span> */}
-        </OR>
-        <Link to="/register">
+        {/* </OR> */}
+        {/* <Link to="/register">
           <Register>CREAT NEW ACCOUNT</Register>
-        </Link>
+        </Link> */}
       </Wraper>
     </Container>
   );
@@ -146,21 +179,20 @@ const InputSelect = styled.select`
   padding-right: 40px;
 
   appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
 
-    option{
-        padding: 50px 10px;
-        min-height: 60px;
-      }
-    
+  option {
+    padding: 50px 10px;
+    min-height: 60px;
+  }
+
   &:focus {
     border-radius: 4px;
     outline: 1px solid gray;
   }
- 
 `;
 const InputLabel = styled.label`
   margin: 10px 20px 5px;
@@ -200,6 +232,16 @@ const Register = styled(SubmitButto)`
     color: white;
     background: black;
   }
+`;
+
+const ForgetPw = styled.p`
+font-size: 12px;
+text-align: right;
+margin-top: 10px;
+
+a{
+  font-size: 14px;
+}
 `;
 
 export {

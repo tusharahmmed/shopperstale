@@ -1,20 +1,22 @@
 // @packages
 import React, { useState } from "react";
 import swal from "sweetalert";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
+import auth from "../../../firebase.init";
 // @components
 import {
   Container,
   InputLabel,
   InputWraper,
-  OR,
   SubmitButto,
   Wraper,
 } from "../../Logins/Login";
+import { LoadingOverlay } from "@mantine/core";
+import { useEffect } from "react";
 
 const MakeAdmin = () => {
   // state
@@ -24,13 +26,18 @@ const MakeAdmin = () => {
     setVisible((visible) => !visible);
   };
 
+  // use auth
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  // use form
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
+  // handle submission
   const onSubmit = (data) => {
     const pw = data.password;
 
@@ -55,65 +62,67 @@ const MakeAdmin = () => {
       }
 
       // after validation
+      console.log(data);
 
-
-
+      // alert for confimation
+      swal({
+        title: "Are you sure?",
+        text: "Once created, all access will given to him!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((makeAdmin) => {
+        if (makeAdmin) {
+          // create user
+          createUserWithEmailAndPassword(data.email, pw);
+        } else {
+          // if admin cancel promp
+          swal("Your website is safe!", {
+            buttons: false,
+            timer: 1000,
+          });
+        }
+      });
     } else {
       swal("Password must be at least 8 characters");
     }
-
-    console.log(data.password.match(/[A-Z]/));
-    console.log(data.password.match(/[a-z]/));
-    console.log(data.password.match(/[0-9]/));
-    console.log(data.password.match(/[!@#$%^&*)(_:",.]/));
-
-    return;
-
-    // alert for confimation
-    swal({
-      title: "Are you sure?",
-      text: "Once created, all access will given to him!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((makeAdmin) => {
-      // if (makeAdmin) {
-      //     // send data to backend
-      //     fetch('https://damp-bayou-69353.herokuapp.com/create-new-admin', {
-      //         method: 'POST',
-      //         headers: {
-      //             'Content-Type': 'application/json'
-      //         },
-      //         body: JSON.stringify(data)
-      //     })
-      //         .then(res => res.json())
-      //         .then(success => {
-      //             // if updated
-      //             if (success.modifiedCount) {
-      //                 // confirmation alert
-      //                 swal("Poof! You have successfully created new admin!.", {
-      //                     icon: "success",
-      //                     buttons: false,
-      //                     timer: 1000
-      //                 });
-      //                 // reset form
-      //                 reset();
-      //             }
-      //         })
-      // } else {
-      //     // if admin cancel promp
-      //     swal("Your website is safe!", {
-      //         buttons: false,
-      //         timer: 1000
-      //     });
-      // }
-    });
   };
 
+
+  // create user response
+
+useEffect(()=>{
+    // if successfull
+  if (user) {
+    reset()
+    // confirmation alert
+    swal("Poof! You have successfully created new admin!.", {
+      icon: "success",
+      buttons: false,
+      timer: 1000,
+    });
+    // console.log(user);
+    // reset form
+  }
+
+// if error
+if(error) {
+  swal({
+    text: `${error?.message}`,
+    icon: "warning",
+    button: "ok",
+    dangerMode: true,
+  })
+}
+},[user,error])
   return (
     <RootContainer>
       <Wraper>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          style={{ position: "relative" }}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {loading && <LoadingOverlay visible={true} overlayBlur={2} />}
           <InputWraper>
             <InputLabel>Name</InputLabel>
             <input {...register("name", { required: true })} type="text" />

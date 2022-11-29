@@ -1,5 +1,5 @@
 import "./App.css";
-import {Footer, Header} from './components';
+import {Footer, Header, PrivateRoute} from './components';
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import "react-whatsapp-widget/dist/index.css";
 
 import { DashboardPage, HomePage, HowToOrderPage, LoginPage } from "./pages";
 import RefundPolicy from "./components/refund/RefundPolicy";
+import ForgetPassword from "./components/Logins/ForgetPassword";
 
 function App() {
 
@@ -27,12 +28,15 @@ function App() {
             <RefundPolicy />
           </Route>
           {/* User interactions */}
-          <Route path="/login">
+          <Route exact path="/login">
             <LoginPage />
           </Route>
-          <Route path="/admin">
-            <DashboardPage />
+          <Route path="/login/reset">
+            <ForgetPassword />
           </Route>
+          <PrivateRoute path="/admin">
+            <DashboardPage />
+          </PrivateRoute>
         </Switch>
         <Footer />
       </BrowserRouter>

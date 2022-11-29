@@ -5,7 +5,8 @@ import styled from "styled-components";
 const Header = () => {
 
   let match = useRouteMatch('/admin');
-  if(match){
+  let match2 = useRouteMatch('/login');
+  if(match || match2){
     return null;
   }
 

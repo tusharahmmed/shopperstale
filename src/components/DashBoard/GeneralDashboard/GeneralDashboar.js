@@ -3,6 +3,11 @@ import React from "react";
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 import { Accordion } from "@mantine/core";
 import styled from "styled-components";
+import { useSignOut } from "react-firebase-hooks/auth";
+import auth from "../../../firebase.init";
+import swal from "sweetalert";
+
+
 // import swal from "sweetalert";
 // @icons
 import { HiOutlineHome, HiOutlineUser } from "react-icons/hi";
@@ -20,14 +25,26 @@ import {
   UserSettings,
   PaymentMethods,
 } from "../index";
-// import useAuth from '../../../hooks/useAuth';
-// import AdminRoute from '../AdminRoute/AdminRoute';
 
 const GeneralDashboar = () => {
   let { path, url } = useRouteMatch();
-  // const { logOut, user, isAdmin } = useAuth();
 
-  
+  // sign Out
+  const [signOut] = useSignOut(auth);
+
+  const handleSignOut = () => {
+    swal({
+      title: "Are you sure?",
+      text: "You want to log out!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((deleteOrder) => {
+      if (deleteOrder) {
+        signOut();
+      }
+    });
+  };
 
   // // get my orders
   // const [myorders, setMyorders] = useState({});
@@ -172,47 +189,35 @@ const GeneralDashboar = () => {
           </span>
         </Logo>
 
-       <MenuItemWraper>
-       
-       <Link to={`${url}`}>
-          <MenuItem>
-            <span>
-              <HiOutlineHome size={21} />
-            </span>
-            <p>Dashboard</p>
-          </MenuItem>
-        </Link>
+        <MenuItemWraper>
+          <Link to={`${url}`}>
+            <MenuItem>
+              <span>
+                <HiOutlineHome size={21} />
+              </span>
+              <p>Dashboard</p>
+            </MenuItem>
+          </Link>
 
-        <Link to={`${url}/profile`}>
-          <MenuItem>
-            <span>
-              <HiOutlineUser />
-            </span>
-            <p>Profile Settings</p>
-          </MenuItem>
-        </Link>
+          <Link to={`${url}/profile`}>
+            <MenuItem>
+              <span>
+                <HiOutlineUser />
+              </span>
+              <p>Profile Settings</p>
+            </MenuItem>
+          </Link>
 
-        <Link to={`${url}/payment`}>
-          <MenuItem>
-            <span>
-              <BiCreditCardFront />
-            </span>
-            <p>Payment Method</p>
-          </MenuItem>
-        </Link>
+          <Link to={`${url}/payment`}>
+            <MenuItem>
+              <span>
+                <BiCreditCardFront />
+              </span>
+              <p>Payment Method</p>
+            </MenuItem>
+          </Link>
 
-        {
-          // isAdmin && (
           <>
-            {/* <Link to={`${url}/product-list`}>
-              <MenuItem>
-                <span>
-                  <HiOutlineShoppingBag />
-                </span>
-                <p>Product List</p>
-              </MenuItem>
-            </Link> */}
-
             <Accordion chevronPosition="right">
               <AccordionList
                 title={"Manage Sites"}
@@ -229,20 +234,7 @@ const GeneralDashboar = () => {
               />
             </Accordion>
           </>
-          // )
-        }
 
-        {/* <Link to={`${url}/orders`}>
-          <MenuItem>
-            <span>
-              <HiOutlineShoppingCart />
-            </span>
-            <p>Order History</p>
-          </MenuItem>
-        </Link> */}
-
-        {
-          // isAdmin && (
           <>
             <Link to={`${url}/create-admin`}>
               <MenuItem>
@@ -262,19 +254,16 @@ const GeneralDashboar = () => {
               </MenuItem>
             </Link>
           </>
-          // )
-        }
-        <div>
-          <MenuItem>
-            <span>
-              <MdLogout />
-            </span>
-            <p>Sign Out</p>
-          </MenuItem>
-        </div>
-        
 
-       </MenuItemWraper>
+          <div>
+            <MenuItem onClick={handleSignOut}>
+              <span>
+                <MdLogout />
+              </span>
+              <p>Sign Out</p>
+            </MenuItem>
+          </div>
+        </MenuItemWraper>
       </MenuBar>
 
       <MenuContentWrapper>
@@ -308,7 +297,6 @@ const GeneralDashboar = () => {
               <PaymentMethods />
             </div>
           </Route>
-
 
           <Route exact path={`${path}/manage-site`}>
             <Title>Manage Sites</Title>
@@ -366,7 +354,6 @@ const Container = styled.div`
   height: calc(100vh - 70px);
   overflow: hidden;
 
- 
   @media (max-width: 1200px) {
     grid-template-columns: 1fr 3fr;
   }
@@ -375,7 +362,6 @@ const Container = styled.div`
     grid-template-columns: 2fr 3fr;
     height: 100%;
   }
-  
 
   @media (max-width: 668px) {
     margin-top: 0px;
@@ -414,21 +400,20 @@ const Logo = styled.div`
 `;
 
 const MenuItemWraper = styled.div`
-
   height: 100vh;
   overflow: scroll;
   padding-bottom: 28vh;
 
-  -ms-overflow-style: none; 
-  scrollbar-width: none;  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
 
-  @media (max-width: 900px){
+  @media (max-width: 900px) {
     height: auto;
-  overflow: hidden;
-  padding-bottom: 0vh;
+    overflow: hidden;
+    padding-bottom: 0vh;
   }
 `;
 const MenuItem = styled.div`
@@ -497,7 +482,6 @@ const MenuContent = styled.div`
 const MenuContentFull = styled(MenuContent)`
   grid-template-columns: repeat(1, 1fr);
 `;
-
 
 // accourdion styled
 const SubAccordion = styled.div`
