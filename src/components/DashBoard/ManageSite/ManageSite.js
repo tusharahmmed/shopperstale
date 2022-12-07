@@ -1,161 +1,93 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { ImCancelCircle } from "react-icons/im";
-import { AiFillDelete } from "react-icons/ai";
+import { useParams } from "react-router-dom";
+import {
+  useGetChinaSiteQuery,
+  useGetIndianSiteQuery,
+  useGetUkSiteQuery,
+} from "../../../rtk/features/api/ApiSlice";
+import SingleSite from "./SingleSite";
 
 const ManageSite = () => {
-  const data = [
-    {
-      id: 1,
-      img: "/images/brand/amazon.png",
-      url: "https://www.amazon.in/",
-      name: "Amazon",
-      country: "india",
-    },
-    {
-      id: 2,
-      img: "/images/brand/myntra.png",
-      url: "https://www.myntra.com/",
-      name: "Myntra",
-      country: "india",
-    },
-    {
-      id: 3,
-      img: "/images/brand/flipkart.png",
-      url: "https://www.flipkart.com/",
-      name: "Flipkart",
-      country: "india",
-    },
-    {
-      id: 4,
-      img: "/images/brand/itokri.png",
-      url: "https://www.itokri.com/",
-      name: "itokri",
-      country: "india",
-    },
-    {
-      id: 5,
-      img: "/images/brand/alibaba.png",
-      url: "https://www.alibaba.com/",
-      name: "Alibaba",
-      country: "china",
-    },
-    {
-      id: 6,
-      img: "/images/brand/aliexpress.png",
-      url: "https://www.aliexpress.com/",
-      name: "AliExpress",
-      country: "china",
-    },
-    {
-      id: 1,
-      img: "/images/brand/amazon.png",
-      url: "https://www.amazon.in/",
-      name: "Amazon",
-      country: "india",
-    },
-    {
-      id: 2,
-      img: "/images/brand/myntra.png",
-      url: "https://www.myntra.com/",
-      name: "Myntra",
-      country: "india",
-    },
-    {
-      id: 3,
-      img: "/images/brand/flipkart.png",
-      url: "https://www.flipkart.com/",
-      name: "Flipkart",
-      country: "india",
-    },
-    {
-      id: 4,
-      img: "/images/brand/itokri.png",
-      url: "https://www.itokri.com/",
-      name: "itokri",
-      country: "india",
-    },
-    {
-      id: 5,
-      img: "/images/brand/alibaba.png",
-      url: "https://www.alibaba.com/",
-      name: "Alibaba",
-      country: "china",
-    },
-    {
-      id: 6,
-      img: "/images/brand/aliexpress.png",
-      url: "https://www.aliexpress.com/",
-      name: "AliExpress",
-      country: "china",
-    },
-    {
-      id: 1,
-      img: "/images/brand/amazon.png",
-      url: "https://www.amazon.in/",
-      name: "Amazon",
-      country: "india",
-    },
-    {
-      id: 2,
-      img: "/images/brand/myntra.png",
-      url: "https://www.myntra.com/",
-      name: "Myntra",
-      country: "india",
-    },
-    {
-      id: 3,
-      img: "/images/brand/flipkart.png",
-      url: "https://www.flipkart.com/",
-      name: "Flipkart",
-      country: "india",
-    },
-    {
-      id: 4,
-      img: "/images/brand/itokri.png",
-      url: "https://www.itokri.com/",
-      name: "itokri",
-      country: "india",
-    },
-    {
-      id: 5,
-      img: "/images/brand/alibaba.png",
-      url: "https://www.alibaba.com/",
-      name: "Alibaba",
-      country: "china",
-    },
-    {
-      id: 6,
-      img: "/images/brand/aliexpress.png",
-      url: "https://www.aliexpress.com/",
-      name: "AliExpress",
-      country: "china",
-    },
-  ];
+  // get params value
+  const { country } = useParams();
 
-  // states
-  const [items, setItem] = useState(data);
+  // rtk hooks
+  const {
+    data: indiaSite,
+    isError: indiaError,
+    isLoading: indiaLoading,
+  } = useGetIndianSiteQuery();
+  const {
+    data: chinaSite,
+    isError: chinaError,
+    isLoading: chinaLoading,
+  } = useGetChinaSiteQuery();
+  const {
+    data: ukSite,
+    isError: ukError,
+    isLoading: ukLoading,
+  } = useGetUkSiteQuery();
+
+  let content = null;
+
+  // manage india sites
+  if (country === "india") {
+    if (indiaLoading) {
+      content = "Loading...";
+    }
+    if (!indiaLoading && indiaError) {
+      content = "Something went wrong";
+    }
+    if (!indiaLoading && !indiaError && indiaSite?.length === 0) {
+      content = "No site Found";
+    }
+    if (!indiaLoading && !indiaError && indiaSite?.length > 0) {
+      content = indiaSite.map((item) => (
+        <SingleSite info={item} key={item?._id} />
+      ));
+    }
+  }
+
+  // manage china sites
+  if (country === "china") {
+    if (chinaLoading) {
+      content = "Loading...";
+    }
+    if (!chinaLoading && chinaError) {
+      content = "Something went wrong";
+    }
+    if (!chinaLoading && !chinaError && chinaSite?.length === 0) {
+      content = "No site Found";
+    }
+    if (!chinaLoading && !chinaError && chinaSite?.length > 0) {
+      content = chinaSite.map((item) => (
+        <SingleSite info={item} key={item?._id} />
+      ));
+    }
+  }
+
+  // manage uk sites
+  if (country === "uk") {
+    if (ukLoading) {
+      content = "Loading...";
+    }
+    if (!ukLoading && ukError) {
+      content = "Something went wrong";
+    }
+    if (!ukLoading && !ukError && ukSite?.length === 0) {
+      content = "No site Found";
+    }
+    if (!ukLoading && !ukError && ukSite?.length > 0) {
+      content = ukSite.map((item) => (
+        <SingleSite info={item} key={item?._id} />
+      ));
+    }
+  }
 
   return (
     <Container>
-      <Wraper>
-        {items.map((item, i) => {
-          return (
-            <Item key={item.id}>
-              <ImageWrap>
-                <img src={item.img} alt="" />
-              </ImageWrap>
-              <BodyWrap>
-                <h3>{item.name}</h3>
-                <p>{item.url}</p>
-              </BodyWrap>
-              <Icon>
-                <ImCancelCircle size={20} />
-              </Icon>
-            </Item>
-          );
-        })}
-      </Wraper>
+      <Wraper>{content}</Wraper>
     </Container>
   );
 };
@@ -163,23 +95,22 @@ const ManageSite = () => {
 export default ManageSite;
 
 const Container = styled.div`
-height: calc(100vh - 70px);
-overflow: scroll;
-scroll-behavior: smooth;
-padding-bottom: 100px;
+  height: calc(100vh - 70px);
+  overflow: scroll;
+  scroll-behavior: smooth;
+  padding-bottom: 100px;
 
+  @media (max-width: 992px) {
+    height: auto;
+    overflow: visible;
+    padding-bottom: 0px;
+  }
 
-@media (max-width: 992px){
-  height: auto;
-  overflow: visible;
-  padding-bottom: 0px;
-}
-
--ms-overflow-style: none; 
-scrollbar-width: none;  
-&::-webkit-scrollbar {
-  display: none;
-}
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Wraper = styled.div`
@@ -190,71 +121,6 @@ const Wraper = styled.div`
   }
   @media (max-width: 700px) {
     width: 100%;
-  }
-`;
-const Item = styled.div`
-  border-radius: 10px;
-  border: 1px solid black;
-  display: flex;
-  height: 60px;
-  margin-bottom: 15px;
-  width: 100%;
-  background: #fff;
-  position: relative;
-
-  @media (max-width: 700px) {
-    flex-direction: column;
-  }
-`;
-const ImageWrap = styled.div`
-  background: url(${(props) => props.img});
-  background-size: cover;
-  background-position: center;
-  width: 40%;
-  border-radius: 20px;
- 
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 65px;
-
-    @media (max-width: 700px) {
-      display: none;
-    }
-  }
-`;
-
-const BodyWrap = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  h2 {
-    font-size: 18px;
-    margin-bottom: 5px;
-  }
-  p {
-    font-size: 14px;
-  }
-`;
-
-const Icon = styled.div`
-  position: absolute;
-  right: 10px;
-  top: 35%;
-  cursor: pointer;
-
-  @media (max-width: 900px){
-    top: 20%;
-  }
-  @media (max-width: 700px){
-    top: 10%;
-    right: 5px;
   }
 `;
 

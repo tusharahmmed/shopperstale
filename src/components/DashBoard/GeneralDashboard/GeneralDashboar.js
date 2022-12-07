@@ -7,7 +7,6 @@ import { useSignOut } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import swal from "sweetalert";
 
-
 // import swal from "sweetalert";
 // @icons
 import { HiOutlineHome, HiOutlineUser } from "react-icons/hi";
@@ -46,76 +45,22 @@ const GeneralDashboar = () => {
     });
   };
 
-  // // get my orders
-  // const [myorders, setMyorders] = useState({});
-
-  // useEffect(() => {
-  //     fetch(`https://damp-bayou-69353.herokuapp.com/my-order/${user.email}`)
-  //         .then(res => res.json())
-  //         .then(data => setMyorders(data));
-  // }, [myorders]);
-
-  // delete orderd product
-  // const cancelOrder = id => {
-
-  //     swal({
-  //         title: "Are you sure?",
-  //         text: "You want to cancel order!",
-  //         icon: "warning",
-  //         buttons: true,
-  //         dangerMode: true,
-  //     })
-  //         .then((deleteOrder) => {
-
-  //             if (deleteOrder) {
-  //                 // send data to backend
-  //                 fetch(`https://damp-bayou-69353.herokuapp.com/cancel-order/${id}`, {
-  //                     method: 'DELETE'
-  //                 })
-  //                     .then(res => res.json())
-  //                     .then(data => {
-  //                         // if updated
-  //                         if (data.deletedCount) {
-  //                             // reset orders
-  //                             setMyorders({})
-  //                             // confirmation alert
-  //                             swal("Poof! You have successfully canceled order!", {
-  //                                 icon: "success",
-  //                                 buttons: false,
-  //                                 timer: 1000
-  //                             });
-
-  //                         }
-
-  //                     })
-
-  //             } else {
-  //                 // if admin cancel promp
-  //                 swal("Your order is safe!", {
-  //                     buttons: false,
-  //                     timer: 1000
-  //                 });
-  //             }
-  //         });
-
-  // } // close delete order
-
   // layout data accordion
   const layoutCategory = [
     {
       id: 1,
       name: "India",
-      url: `${url}/manage-layout?q=india`,
+      url: `${url}/manage-layout/india`,
     },
     {
       id: 2,
       name: "UK",
-      url: `${url}/manage-layout?q=uk`,
+      url: `${url}/manage-layout/uk`,
     },
     {
       id: 3,
       name: "China",
-      url: `${url}/manage-layout?q=china`,
+      url: `${url}/manage-layout/china`,
     },
   ];
 
@@ -124,17 +69,17 @@ const GeneralDashboar = () => {
     {
       id: 1,
       name: "India",
-      url: `${url}/manage-site?q=india`,
+      url: `${url}/manage-site/india`,
     },
     {
       id: 2,
       name: "UK",
-      url: `${url}/manage-site?q=uk`,
+      url: `${url}/manage-site/uk`,
     },
     {
       id: 3,
       name: "China",
-      url: `${url}/manage-site?q=china`,
+      url: `${url}/manage-site/china`,
     },
   ];
 
@@ -226,13 +171,13 @@ const GeneralDashboar = () => {
               />
             </Accordion>
 
-            <Accordion chevronPosition="right">
+            {/* <Accordion chevronPosition="right">
               <AccordionList
                 title={"Manage Layout"}
                 list={layoutCategory}
                 icon={<RiBarChartFill />}
               />
-            </Accordion>
+            </Accordion> */}
           </>
 
           <>
@@ -270,7 +215,7 @@ const GeneralDashboar = () => {
         <Switch>
           <Route exact path={path}>
             <Title>Dashboard</Title>
-            <MenuContent>
+            <div>
               {/* <CardItem />
                             <CardItem /> */}
               {/* {products.length &&
@@ -281,7 +226,8 @@ const GeneralDashboar = () => {
                     ""
                   );
                 })} */}
-            </MenuContent>
+                {/* <iframe src="https://onedrive.live.com/embed?cid=4F489BE434DEAA84&resid=4F489BE434DEAA84%2110650&authkey=APquV2wjzwUY9aA&em=2" onload="this.width=screen.width;this.height=screen.height;"  frameborder="0" scrolling="no"></iframe> */}
+            </div>
           </Route>
 
           <Route exact path={`${path}/profile`}>
@@ -298,19 +244,19 @@ const GeneralDashboar = () => {
             </div>
           </Route>
 
-          <Route exact path={`${path}/manage-site`}>
+          <Route exact path={`${path}/manage-site/:country`}>
             <Title>Manage Sites</Title>
             <MenuContentFull>
               <ManageSite />
             </MenuContentFull>
           </Route>
 
-          <Route exact path={`${path}/manage-layout`}>
+          {/* <Route exact path={`${path}/manage-layout`}>
             <Title>Manage Layout</Title>
             <MenuContentFull>
               <ManageLayout />
             </MenuContentFull>
-          </Route>
+          </Route> */}
 
           <Route exact path={`${path}/orders`}>
             <Title>My Orders</Title>

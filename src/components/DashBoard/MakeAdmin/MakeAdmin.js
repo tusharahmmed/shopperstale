@@ -17,10 +17,12 @@ import {
 } from "../../Logins/Login";
 import { LoadingOverlay } from "@mantine/core";
 import { useEffect } from "react";
+import { useAddUserToDbMutation } from "../../../rtk/features/api/ApiSlice";
 
 const MakeAdmin = () => {
   // state
   const [visible, setVisible] = useState(false);
+  const [formData, setFormData] = useState({});
 
   const handlePwVisible = () => {
     setVisible((visible) => !visible);
@@ -30,12 +32,11 @@ const MakeAdmin = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
+  // rtk hooks
+  const [addUserToDb, { isSuccess }] = useAddUserToDbMutation();
+
   // use form
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   // handle submission
   const onSubmit = (data) => {
@@ -61,8 +62,8 @@ const MakeAdmin = () => {
         return;
       }
 
-      // after validation
-      console.log(data);
+      // after validation save form data for create user request
+      setFormData(data);
 
       // alert for confimation
       swal({
@@ -88,33 +89,41 @@ const MakeAdmin = () => {
     }
   };
 
+  // create user to firebase response
 
-  // create user response
-
-useEffect(()=>{
+  useEffect(() => {
     // if successfull
-  if (user) {
-    reset()
-    // confirmation alert
-    swal("Poof! You have successfully created new admin!.", {
-      icon: "success",
-      buttons: false,
-      timer: 1000,
-    });
-    // console.log(user);
-    // reset form
-  }
+    if (user) {
+      reset();
+      // confirmation alert
+      swal("Poof! You have successfully created new admin!.", {
+        icon: "success",
+        buttons: false,
+        timer: 1000,
+      });
+      // save user to db
+      addUserToDb(formData);
+    }
 
-// if error
-if(error) {
-  swal({
-    text: `${error?.message}`,
-    icon: "warning",
-    button: "ok",
-    dangerMode: true,
-  })
-}
-},[user,error])
+    // if error
+    if (error) {
+      swal({
+        text: `${error?.message}`,
+        icon: "warning",
+        button: "ok",
+        dangerMode: true,
+      });
+    }
+  }, [user, error]);
+
+  // rtk response
+  useEffect(() => {
+    if (isSuccess) {
+      // after save info to db clear state
+      setFormData({});
+    }
+  }, [isSuccess]);
+
   return (
     <RootContainer>
       <Wraper>
@@ -125,7 +134,7 @@ if(error) {
           {loading && <LoadingOverlay visible={true} overlayBlur={2} />}
           <InputWraper>
             <InputLabel>Name</InputLabel>
-            <input {...register("name", { required: true })} type="text" />
+            <input {...register("displayName", { required: true })} type="text" />
           </InputWraper>
 
           <InputWraper>

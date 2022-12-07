@@ -4,8 +4,8 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Modal } from "@mantine/core";
 import ModalContent from "./ModalContent";
 
-const AddCard = () => {
-  const [opened, setOpened] = useState(false);
+const AddCard = ({opened,setOpened}) => {
+ 
 
   return (
     <>

@@ -1,10 +1,32 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {MdDelete} from "react-icons/md"
 import swal from "sweetalert";
 
-const CardItem = () => {
+import {useDeletePaymentMethodMutation} from '../../../rtk/features/api/ApiSlice';
+
+const CardItem = ({payment}) => {
+
+  const {_id,content,image} = payment || {};
+
+  // DELETE MUTATION
+  const [deletePaymentMethod,{isLoading,isError,isSuccess}] = useDeletePaymentMethodMutation();
+
+  // response conditions
+  useEffect(()=> {
+   if(isSuccess){
+    swal("Poof! Your payment getway has been deleted!", {
+      icon: "success",
+      buttons: false,
+      timer: 1000,
+    });
+   }
+  },[isSuccess])
+
+
+
+
 
   const handleDelete = () => {
     swal({
@@ -16,11 +38,9 @@ const CardItem = () => {
     })
     .then((willDelete) => {
       if (willDelete) {
-        swal("Poof! Your payment getway has been deleted!", {
-          icon: "success",
-          buttons: false,
-          timer: 1000,
-        });
+
+        // call actions
+        deletePaymentMethod(_id);
       }
     });
   }
@@ -28,10 +48,10 @@ const CardItem = () => {
 
   return (
     <Container>
-      <Thumb img={"/images/pay/bkash.png"}></Thumb>
+      <Thumb img={content}></Thumb>
       <Description>
         <div>
-          <Logo>
+          <Logo logo={image}>
           </Logo>
         </div>
         <br />
@@ -73,7 +93,7 @@ const Logo = styled.div`
 
 width: 56px;
 height: 56px;
-background: url('https://www.bssnews.net/assets/news_photos/2022/06/28/image-69154-1656417659.jpg');
+background: url(${(props)=> props.logo});
 background-position: center;
 background-size: cover;
   

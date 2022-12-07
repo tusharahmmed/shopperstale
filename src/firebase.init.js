@@ -6,12 +6,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBQdNEgJ44zaCBD2OMXiqu4nCARHf7fYMA",
-  authDomain: "shoppers-tale.firebaseapp.com",
-  projectId: "shoppers-tale",
-  storageBucket: "shoppers-tale.appspot.com",
-  messagingSenderId: "431230494638",
-  appId: "1:431230494638:web:a66609126f98be9e3f0a3f",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STRONGE_BUCKED,
+  messagingSenderId: process.env.REACT_APP_MESSAGEING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID
 };
 
 // Initialize Firebase

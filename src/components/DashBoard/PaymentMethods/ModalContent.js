@@ -1,41 +1,49 @@
-import { TextInput } from "@mantine/core";
+import { LoadingOverlay, TextInput } from "@mantine/core";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 
 import DropFilezone from "../../shared/DropFilezone";
+import { useAddPaymentMethodMutation } from "../../../rtk/features/api/ApiSlice";
 
 const ModalContent = () => {
   // states
   const [logo, setLogo] = useState("");
   const [qrcode, setQrcode] = useState("");
-  
 
   // hook form
-  const { register, handleSubmit, } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
+  // post req
+  const [addPaymentMethod, { isLoading, isError, data: addedMethod }] = useAddPaymentMethodMutation();
 
-
-  const onSubmit = data => {
-    data.logo = logo;
-    data.qrcode = qrcode;
+  const onSubmit = (data) => {
+    data.image = logo;
+    data.content = qrcode;
 
     // validate
-    if(data.logo === "" || data.qrcode === ""){
+    if (data.logo === "" || data.qrcode === "") {
       alert("please insert images");
-    }else{
-      console.log(data)
+    } else {
+      addPaymentMethod(data);
     }
-
-  }
-
-  
+  };
 
   return (
     <Container>
+      {isLoading && <LoadingOverlay visible={true} overlayBlur={2} />}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput {...register("methodName",{required: true})} placeholder="Method Name" label="Name" withAsterisk />
-        <TextInput {...register("methodDescription",{required: 'true'})} placeholder="Method Description" label="Description" />
+        <TextInput
+          {...register("label", { required: true })}
+          placeholder="Method Name"
+          label="Name"
+          withAsterisk
+        />
+        <TextInput
+          {...register("description", { required: "true" })}
+          placeholder="Method Description"
+          label="Description"
+        />
         <CustomInput>
           <p>
             Logo <span>*</span>
@@ -74,7 +82,9 @@ const ModalContent = () => {
 
 export default ModalContent;
 
-const Container = styled.div``;
+const Container = styled.div`
+  position: relative;
+`;
 
 const CustomInput = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica,
@@ -90,7 +100,7 @@ const CustomInput = styled.div`
 
 const Upload = styled.button`
   width: 100%;
-  background: ${(props)=> props?.disabled? 'gray': '#3d69e1'};
+  background: ${(props) => (props?.disabled ? "gray" : "#3d69e1")};
   color: white;
   padding: 10px;
   text-align: center;

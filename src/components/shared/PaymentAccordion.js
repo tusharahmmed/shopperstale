@@ -1,29 +1,11 @@
 import React from "react";
 import { Group, Avatar, Text, Accordion } from "@mantine/core";
 import styled from "styled-components";
+import { useGetPaymentMethodsQuery } from "../../rtk/features/api/ApiSlice";
 
 const PaymentAccordion = () => {
-  const charactersList = [
-    {
-      id: "bkash",
-      image:
-        "https://www.bssnews.net/assets/news_photos/2022/06/28/image-69154-1656417659.jpg",
-      label: "Bkash",
-      description: "bKash is A mobile financial service in Bangladesh",
-      content: "/images/pay/bkash.png",
-      color: "rgb(220 55 98 / 25%)",
-    },
-
-    {
-      id: "nagad",
-      image:
-        "https://www.observerbd.com/2021/04/20/observerbd.com_1618922147.jpg",
-      label: "Nagad",
-      description: "Digital Financial Service of Bangladesh Post Office",
-      content: "/images/pay/nagad.png",
-      color: "rgb(231 67 74 / 25%)",
-    },
-  ];
+  // get data
+  const { data: paymentList, isLoading, isError } = useGetPaymentMethodsQuery();
 
   function AccordionLabel({ label, image, description }) {
     return (
@@ -39,22 +21,34 @@ const PaymentAccordion = () => {
     );
   }
 
-  const items = charactersList.map((item) => (
-    <Accordion.Item value={item.id} key={item.label}>
-      <Accordion.Control>
-        <AccordionLabel {...item} />
-      </Accordion.Control>
-      <Accordion.Panel>
-        <ContentWraper color={item.color}>
-          <img src={item.content} alt="" />
-        </ContentWraper>
-      </Accordion.Panel>
-    </Accordion.Item>
-  ));
+  // content conditions
+  let content = null;
+  if (isLoading) {
+    content = "Loading...";
+  }
+  if (!isLoading && isError) {
+  }
+  if (!isLoading && !isError && paymentList?.length === 0) {
+    content = "No Payment Methods Found";
+  }
+  if (!isLoading && !isError && paymentList?.length > 0) {
+    content = paymentList.map((item) => (
+      <Accordion.Item value={item.label} key={item._id}>
+        <Accordion.Control>
+          <AccordionLabel {...item} />
+        </Accordion.Control>
+        <Accordion.Panel>
+          <ContentWraper color={item.color? item.color : 'white'}>
+            <img src={item.content} alt="" />
+          </ContentWraper>
+        </Accordion.Panel>
+      </Accordion.Item>
+    ));
+  }
 
   return (
     <Accordion chevronPosition="right" variant="contained">
-      {items}
+      {content}
     </Accordion>
   );
 };

@@ -1,32 +1,54 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Modal } from "@mantine/core";
+import { LoadingOverlay, Modal } from "@mantine/core";
 
 import { BiPencil } from "react-icons/bi";
 import UserModal from "./UserModal";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from "../../../firebase.init";
+import { useGetUserDetailsQuery } from "../../../rtk/features/api/ApiSlice";
+
 
 const UserSettings = () => {
   const [editable, setEditable] = useState(false);
 
+  // auth 
+  const [user] = useAuthState(auth);
+
+  // rtk hooks
+  const {data,isLoading,isError} = useGetUserDetailsQuery(user.email);
+
+  let content = null;
+
+  if(isLoading){
+    content = <div style={{position: 'relative'}}><LoadingOverlay visible={true} overlayBlur={2} /></div>
+  }
+  if(isError){
+    content = 'Something went wrong'
+  }
+  if(data?.email){
+    content = <Wrap>
+    <Thumb>
+      <img src={data?.img || "https://randomuser.me/api/portraits/men/0.jpg"} height="127" width="120" alt="" />
+    </Thumb>
+    <Info>
+      <InfoWrap>
+        <h2>{data?.displayName}</h2>
+        <p>Email: {data?.email}</p>
+        <p>Phone: {data?.phone}</p>
+        <p>Role: Admin</p>
+        <span>
+          <BiPencil size={22} onClick={()=> setEditable(true)} />
+        </span>
+      </InfoWrap>
+    </Info>
+  </Wrap>
+  }
+
   return (
     <>
       <Container>
-        <Wrap>
-          <Thumb>
-            <img src="https://randomuser.me/api/portraits/men/0.jpg" alt="" />
-          </Thumb>
-          <Info>
-            <InfoWrap>
-              <h2>Mr. Ab Barik</h2>
-              <p>Email: ab@gmail.com</p>
-              <p>Phone: +880 1777 888547</p>
-              <p>Role: Admin</p>
-              <span>
-                <BiPencil size={22} onClick={()=> setEditable(true)} />
-              </span>
-            </InfoWrap>
-          </Info>
-        </Wrap>
+        {content}
       </Container>
 
       <Modal
@@ -35,7 +57,7 @@ const UserSettings = () => {
         title="Edit Profile"
       >
         {/* Modal content */}
-        <UserModal />
+        <UserModal userData={data} setEditable={setEditable} />
       </Modal>
     </>
   );

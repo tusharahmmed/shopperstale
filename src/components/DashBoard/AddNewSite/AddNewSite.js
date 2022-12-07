@@ -9,17 +9,22 @@ import {
   Wraper,
 } from "../../Logins/Login";
 import swal from "sweetalert";
-import { Select } from "@mantine/core";
+import { LoadingOverlay, Select } from "@mantine/core";
 import DropFilezone from "../../shared/DropFilezone";
 import { useForm } from "react-hook-form";
+import { useAddNewSiteMutation } from "../../../rtk/features/api/ApiSlice";
+import { useEffect } from "react";
 
 const AddNewSite = () => {
   // states
   const [country, setCountry] = useState("");
   const [thumb, setThumb] = useState("");
 
+  // rtk hooks
+  const [addNewSite, {isLoading, isError,isSuccess}] = useAddNewSiteMutation();
+
   // hook form
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,reset } = useForm();
 
   const onSubmit = (data) => {
     data.country = country;
@@ -36,36 +41,28 @@ const AddNewSite = () => {
     }
 
     // after valid
-    console.log(data);
+    addNewSite(data);
   };
 
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
 
-  //     // send to server
-  //     // fetch("https://damp-bayou-69353.herokuapp.com/add-car", {
-  //     //   method: "POST",
-  //     //   headers: {
-  //     //     "Content-Type": "application/json",
-  //     //   },
-  //     //   body: JSON.stringify(formData),
-  //     // })
-  //     //   .then((res) => res.json())
-  //     //   .then((data) => {
-  //     //     if (data.insertedId) {
-  //     //       swal("Success!", "Your Car has been Added!", "success", {
-  //     //         timer: 1000,
-  //     //         buttons: false,
-  //     //       });
+  // after response
+ useEffect(()=>{
+  if(isError){
+    swal({icon: "warning",title: "Opps!",text: "Something went wrong."})
+  }
+  if(isSuccess){
+    setCountry("")
+    setThumb("")
+    reset()
+    swal({icon: "success",title: "Good Job",text: "You have successfully added new site"})
+  }
+ },[isError,isSuccess])
 
-  //     //       e.target.reset();
-  //     //     }
-  //     //   });
-  //   };
 
   return (
     <RootContainer>
       <FormWraper>
+        {isLoading && <LoadingOverlay visible={true} overlayBlur={2} />}
         <form onSubmit={handleSubmit(onSubmit)}>
           <InputWraperWidth>
             <InputLabel>Name</InputLabel>
@@ -83,6 +80,7 @@ const AddNewSite = () => {
               onChange={(value) => {
                 setCountry(value);
               }}
+              value={country}
               // {...register("country",{required: true})}
               placeholder="select"
               data={[
@@ -149,6 +147,7 @@ const ThumbInputWraperWidth = styled(InputWraperWidth)`
 const FormWraper = styled(Wraper)`
   width: 80%;
   margin-left: 0px;
+  position: relative;
 
   form {
     display: grid;

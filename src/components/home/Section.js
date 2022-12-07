@@ -1,15 +1,80 @@
 import React from "react";
+import PayBtn from "../shared/PayBtn";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-// import { Fade } from "react-reveal";
-import styled from "styled-components";
-import PayBtn from "../shared/PayBtn";
-import PayNow from "../shared/PayNow";
 import MarkeplaceSlider from "./slider/MarkeplaceSlider";
-// import 'react-tabs/style/react-tabs.css';
+import {
+  useGetChinaSiteQuery,
+  useGetIndianSiteQuery,
+  useGetUkSiteQuery,
+} from "../../rtk/features/api/ApiSlice";
 
 const Section = () => {
   const backgrounds = ["/images/bg/bg-3.png"];
+
+  // indian site
+  const {
+    data: indiaSites,
+    isLoading: indiaLoading,
+    isError: indiaError,
+  } = useGetIndianSiteQuery();
+
+  let indiaTab = null;
+  if (indiaLoading) {
+    indiaTab = "Loading";
+  }
+  if (!indiaLoading && indiaError) {
+    indiaTab = "Something went wrong";
+  }
+  if (!indiaLoading && !indiaError && indiaSites?.length === 0) {
+    indiaTab = "No site found";
+  }
+  if (!indiaLoading && !indiaError && indiaSites?.length > 0) {
+    indiaTab = <MarkeplaceSlider sites={indiaSites} />;
+  }
+
+  // china site
+  const {
+    data: chinaSites,
+    isLoading: chinaLoading,
+    isError: chinaError,
+  } = useGetChinaSiteQuery();
+
+  let chinaTab = null;
+  if (chinaLoading) {
+    chinaTab = "Loading";
+  }
+  if (!chinaLoading && chinaError) {
+    chinaTab = "Something went wrong";
+  }
+  if (!chinaLoading && !chinaError && chinaSites?.length === 0) {
+    chinaTab = "No site found";
+  }
+  if (!chinaLoading && !chinaError && chinaSites?.length > 0) {
+    chinaTab = <MarkeplaceSlider sites={chinaSites} />;
+  }
+
+  // china site
+  const {
+    data: ukSites,
+    isLoading: ukLoading,
+    isError: ukError,
+  } = useGetUkSiteQuery();
+
+  let ukTab = null;
+  if (ukLoading) {
+    ukTab = "Loading";
+  }
+  if (!ukLoading && ukError) {
+    ukTab = "Something went wrong";
+  }
+  if (!ukLoading && !ukError && ukSites?.length === 0) {
+    ukTab = "No site found";
+  }
+  if (!ukLoading && !ukError && ukSites?.length > 0) {
+    ukTab = <MarkeplaceSlider sites={ukSites} />;
+  }
 
   return (
     <>
@@ -41,15 +106,9 @@ const Section = () => {
               <Tab className={"market-tab-item"}>China</Tab>
             </TabList>
 
-            <TabPanel className={"market-tab-panel"}>
-              <MarkeplaceSlider country="india" />
-            </TabPanel>
-            <TabPanel className={"market-tab-panel"}>
-              <MarkeplaceSlider country="uk" />
-            </TabPanel>
-            <TabPanel className={"market-tab-panel"}>
-              <MarkeplaceSlider country="china" />
-            </TabPanel>
+            <TabPanel className={"market-tab-panel"}>{indiaTab}</TabPanel>
+            <TabPanel className={"market-tab-panel"}>{ukTab}</TabPanel>
+            <TabPanel className={"market-tab-panel"}>{chinaTab}</TabPanel>
           </Tabs>
         </SliderWraper>
 
@@ -77,7 +136,7 @@ export const Wrap = styled.div`
 
   scroll-snap-align: start;
 
-  @media (max-width: 700px){
+  @media (max-width: 700px) {
     height: 100%;
   }
 `;
@@ -127,7 +186,7 @@ export const BtnWrap = styled.div`
 `;
 
 export const OrderButton = styled.div`
-  margin: 10px 20px; 
+  margin: 10px 20px;
 
   font-family: g-ssm;
   font-weight: 900;

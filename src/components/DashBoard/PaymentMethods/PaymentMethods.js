@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import styled from 'styled-components';
+import { useGetPaymentMethodsQuery } from '../../../rtk/features/api/ApiSlice';
 import AddCard from './AddCard';
 import CardItem from './CardItem';
 
 const PaymentMethods = () => {
+  // modal state
+  const [opened, setOpened] = useState(false);
+
+  // get list
+  const { data: paymentList, isLoading, isError } = useGetPaymentMethodsQuery();
+
+  // content conditions 
+  let content = null;
+  useEffect(()=>{
+    if(!isLoading && !isError && paymentList?.length > 0){
+      setOpened(false);
+    }
+  },[isLoading,isError,paymentList])
+
+  if(!isLoading && !isError && paymentList?.length > 0){
+    content = paymentList.map ( item => <CardItem key={item._id} payment={item} />)
+  }
+
     return (
         <Container>
-            <CardItem />
-            <CardItem />
-            <AddCard />
+            {content}
+            <AddCard opened={opened} setOpened={setOpened} />
         </Container>
     );
 };
