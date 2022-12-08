@@ -76,6 +76,36 @@ const Section = () => {
     ukTab = <MarkeplaceSlider sites={ukSites} />;
   }
 
+  // section content
+  let section = null;
+  if (indiaLoading || chinaLoading || ukLoading) {
+    section = <Message>Loading...</Message>;
+  }
+  if (indiaError || chinaError || ukError) {
+    section = <Message>Something went wrong. Please reload the page</Message>;
+  }
+
+  if (indiaSites?.length > 0 && chinaSites?.length > 0 && ukSites?.length > 0) {
+    section = (
+      <SliderWraper>
+        <TabTitle>
+          Shop & <br /> Ship From
+        </TabTitle>
+        <Tabs focusTabOnClick={false}>
+          <TabList className="market-tab-list">
+            <Tab className={"market-tab-item"}>India</Tab>
+            <Tab className={"market-tab-item"}>UK</Tab>
+            <Tab className={"market-tab-item"}>China</Tab>
+          </TabList>
+
+          <TabPanel className={"market-tab-panel"}>{indiaTab}</TabPanel>
+          <TabPanel className={"market-tab-panel"}>{ukTab}</TabPanel>
+          <TabPanel className={"market-tab-panel"}>{chinaTab}</TabPanel>
+        </Tabs>
+      </SliderWraper>
+    );
+  }
+
   return (
     <>
       <Wrap imgUrl={backgrounds[0]}>
@@ -95,22 +125,7 @@ const Section = () => {
         </LogoWraper>
 
         {/* section tab */}
-        <SliderWraper>
-          <TabTitle>
-            Shop & <br /> Ship From
-          </TabTitle>
-          <Tabs focusTabOnClick={false}>
-            <TabList className="market-tab-list">
-              <Tab className={"market-tab-item"}>India</Tab>
-              <Tab className={"market-tab-item"}>UK</Tab>
-              <Tab className={"market-tab-item"}>China</Tab>
-            </TabList>
-
-            <TabPanel className={"market-tab-panel"}>{indiaTab}</TabPanel>
-            <TabPanel className={"market-tab-panel"}>{ukTab}</TabPanel>
-            <TabPanel className={"market-tab-panel"}>{chinaTab}</TabPanel>
-          </Tabs>
-        </SliderWraper>
+        {section}
 
         {/* <PayNow /> */}
       </Wrap>
@@ -241,5 +256,17 @@ const TabTitle = styled.h1`
     font-size: 40px;
     line-height: 40px;
     margin-top: 30px;
+  }
+`;
+
+const Message = styled.div`
+  padding-bottom: 30vh;
+
+  @media (max-width: 900px) {
+    padding-bottom: 40vh;
+  }
+  @media (max-width: 700px) {
+    padding-top: 5vh;
+    padding-bottom: 0vh;
   }
 `;
