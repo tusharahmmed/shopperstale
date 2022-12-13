@@ -5,6 +5,7 @@ import ManageSite from "./ManageSite/ManageSite";
 import ManageLayout from "./ManageLayout/ManageLayout";
 import UserSettings from "./UserSettings/UserSettings";
 import PaymentMethods from "./PaymentMethods/PaymentMethods";
+import InvoiceBuilder from "./InvoiceBuilder/InvoiceBuilder";
 
 export {
   CardItem,
@@ -14,4 +15,5 @@ export {
   ManageLayout,
   UserSettings,
   PaymentMethods,
+  InvoiceBuilder,
 };

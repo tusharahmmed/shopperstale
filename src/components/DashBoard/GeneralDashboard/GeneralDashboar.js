@@ -13,6 +13,7 @@ import { HiOutlineHome, HiOutlineUser } from "react-icons/hi";
 import { SiSitepoint } from "react-icons/si";
 import { BiCreditCardFront } from "react-icons/bi";
 import { RiBarChartFill } from "react-icons/ri";
+import { TbFileInvoice } from "react-icons/tb";
 import { FaPlus, FaPencilAlt } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 // @components
@@ -23,6 +24,7 @@ import {
   ManageLayout,
   UserSettings,
   PaymentMethods,
+  InvoiceBuilder
 } from "../index";
 
 const GeneralDashboar = () => {
@@ -181,6 +183,15 @@ const GeneralDashboar = () => {
           </>
 
           <>
+            <Link to={`${url}/generate-invoice`}>
+              <MenuItem>
+                <span>
+                  <TbFileInvoice />
+                </span>
+                <p>Generate Invoice</p>
+              </MenuItem>
+            </Link>
+
             <Link to={`${url}/create-admin`}>
               <MenuItem>
                 <span>
@@ -258,16 +269,11 @@ const GeneralDashboar = () => {
             </MenuContentFull>
           </Route> */}
 
-          <Route exact path={`${path}/orders`}>
-            <Title>My Orders</Title>
-            <MenuContent>
-              {/* {
-                                myorders.length ? myorders.map(item => <CardItem
-                                    key={item._id}
-                                    handleCancel={cancelOrder}
-                                    data={item} />) : 'No Order History Found'
-                            } */}
-            </MenuContent>
+          <Route exact path={`${path}/generate-invoice`}>
+            <Title>Invoice Builder</Title>
+            <MenuContentFull>
+              <InvoiceBuilder />
+            </MenuContentFull>
           </Route>
 
           <Route exact path={`${path}/create-admin`}>
