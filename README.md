@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# Medicals
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A Ecommerce Retailer Shop Web Application using `React.js`
 
-## Available Scripts
 
-In the project directory, you can run:
+## Demo
 
-### `npm start`
+[Live Preview](https://shoppers-tale.web.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- Fully Functional Web Application using `React.js`
+- Visitors can find preferred website list for shopping
+- They can send the product link via WhatsApp and Messenger
+- Admin has a general dashboard where he/she can add new sites, edit/update existing sites or delete a site.
+- Generate Invoice is the cool feature of this dashboard panel 
+- Payment method added through QR Code png
+- Admin can create another user as admin. Also, reset password functionality was added.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Environment Variables
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To run this project, you will need to add the following environment variables to your .env.local file.
+These all are firebase credentials.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`REACT_APP_API_KEY`
 
-### `npm run eject`
+`REACT_APP_AUTH_DOMAIN`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+`REACT_APP_PROJECT_ID`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`REACT_APP_STRONGE_BUCKED`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+`REACT_APP_MESSAGEING_SENDER_ID`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+`REACT_APP_APP_ID`
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Run Locally
 
-### Code Splitting
+Clone the project
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+  git clone https://github.com/tusharahmmed/shopperstale.git
+```
 
-### Analyzing the Bundle Size
+Go to the project directory
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+  cd shopperstale
+```
 
-### Making a Progressive Web App
+Install dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+  npm install
+```
 
-### Advanced Configuration
+Start the server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+  npm start
+```
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Copyright
+
+© Copyright 2022 all right reserved  [Tushar Ahmmed](https://github.com/tusharahmmed)
