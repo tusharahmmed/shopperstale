@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const ApiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    // baseUrl: "https://shopperstale.onrender.com/",
-    baseUrl: "http://localhost:5000/",
+    baseUrl: "https://shopperstale.onrender.com/",
+    // baseUrl: "http://localhost:5000/",
   }),
   tagTypes: ["User", "PaymentMethods", "india", "uk", "china"],
 
