@@ -1,4 +1,4 @@
-# Medicals
+# ShoppersTale
 
 A Ecommerce Retailer Shop Web Application using `React.js`
 
